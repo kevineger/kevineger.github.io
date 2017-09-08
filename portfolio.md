@@ -1,7 +1,5 @@
 ---
-layout: page
+layout: home
 title: Portfolio
 permalink: /portfolio/
 ---
-
-This is my dope-ass new portfolio
