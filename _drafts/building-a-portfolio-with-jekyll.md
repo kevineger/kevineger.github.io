@@ -68,7 +68,7 @@ In a Jekyll setting, Front Matter tells Jekyll that this file is special and to 
 
 Add the following YAML front matter block to the post you created:
 
-```
+```md
 ---
 layout: post
 title: Your new dank post
@@ -81,7 +81,7 @@ By adding the predefined `layout` variable to your front matter, you'll notice t
 
 By default, your portfolio is using the minima theme (check `_config.yml` to verify). As we just saw, adding `layout: post` to the front matter seems to add magical styling and render the post inside our site (the navbar is still visible at the top).
 
-What actually happens under the hood is Jekyll sees the `post` layout defined, and takes all the content from the file, and renders it as _content_ inside the `post` layout. 
+What actually happens under the hood is Jekyll sees the `post` layout defined, and takes all the content from the file, and renders it as _content_ inside the `post` layout.
 
 But where does that layout live? How can I make edits to it if I don't like the layout? I highly advise you give the [documentation on themes](https://jekyllrb.com/docs/themes/) a read, but at a high level: some of the site’s directories (such as the `assets`, `_layouts`, `_includes`, and `_sass` directories) are stored in the theme’s gem, hidden from your immediate view. Yet all of the necessary directories will be read and processed during Jekyll’s build process.
 
@@ -233,7 +233,7 @@ permalink: /blog/
 </div>{% endraw %}
 ```
 
-`index.md` is the page our site loads for it's root, and where we want our portfolio to exist. Noting that all this page does is define Front Matter that references `minima`'s `home` layout, let's go ahead and override that. As explained in the [Themes and Layouts](#themes-and-layouts) section of this post, go ahead and override the default home behaviiour by creating a new `home.md` file in the `_layouts` directory and temporarily fill it with dummy content.
+`index.md` is the page our site loads for it's root, and where we want our portfolio to exist. Noting that all this page does is define Front Matter that references `minima`'s `home` layout, let's go ahead and override that. As explained in the [Themes and Layouts](#themes-and-layouts) section of this post, go ahead and override the default home behaviour by creating a new `home.md` file in the `_layouts` directory and temporarily fill it with dummy content.
 
 ```html
 ---
@@ -248,24 +248,54 @@ layout: default
 In an ideal world, employers already know how awesome we are and our portfolio is done with something like the following!
 ![Basic portfolio rendering]({{ site.url }}/assets/img/hello_world_portfolio.png)
 
-Unfortunately, our world is far from ideal. But that's more of an existensial conversation that we'll table for now. Let's concentrate on continuing to build awesome things with Jekyll.
+Unfortunately, our world is far from ideal. But that's more of an existential conversation that we'll table for now. Let's concentrate on continuing to build awesome things with Jekyll.
 
-As I see it, there are two wasy to fundamentally show your portfolio off.
+As I see it, there are two ways to fundamentally show your portfolio off.
 
 1. In a clean single page layout with obvious blocking and succinct navigation
 1. In a page-based flow, where each portfolio item (ie: work experience, education, etc.) is on a different page.
 
 I will be opting for the prior method, but if you do want to have separate pages and leverage Jekyll's custom collections - check out [Max Antonucci's blog post](http://newhaven.io/blog/creating-jekyll-portfolio-page/)!
 
-One of the fundamental template tags we will leverage is `{% raw %}{% include header.html %}{% endraw %}`. The [include template](https://jekyllrb.com/docs/templates/#includes) will allow us to use partials to inject the corresponding markup wherever specified. Let's pencil these out in our `home.html` and add the files to the `_includes` directory.
+One of the fundamental template tags we will leverage is `{% raw %}{% include some_file.MARKUP %}{% endraw %}`. The [include template](https://jekyllrb.com/docs/templates/#includes) will allow us to use partials to inject the corresponding markup wherever specified. Let's pencil these out in our `home.html` and add the files to the `_includes` directory.
 
 ```html
-{% raw %}<div class="home">
+{% raw %}--- 
+layout: default
+---
+
+<div class="home">
   <h1>Hire me plz, thx.</h1>
-  {% include objective.html %}
-  {% include experience.html %}
-  {% include education.html %}
-  {% include projects.html %}
-  {% include skills.html %}
+  {% include portfolio-card.html title="Objective" content="objective.md" %}
+  {% include portfolio-card.html title="Experience" content="experience.md" %}
+  {% include portfolio-card.html title="Education" content="education.md" %}
+  {% include portfolio-card.html title="Projects" content="projects.md" %}
+  {% include portfolio-card.html title="Skills" content="skills.md" %}
 </div>{% endraw %}
 ```
+
+Pro-tip: Write the content of your sections separate from implementing the site. I've found it's easiest to do these two things in isolation. Use lorem-ipsum text as a placeholder until you have the actual content.
+
+For each of the sections on the portfolio, we are rendering some _content_ into a `portfolio-card.html` template that we will later leverage for styling.
+
+Create the `portfolio-card.html` template inside the `_includes` directory with the following:
+
+```html
+{% raw %}<section class="portfolio">
+    <header>
+        <h1>{{ include.title }}</h1>
+        {% if include.content %}
+        <div>
+            {% capture my_include %}{% include {{ include.content }} %}{% endcapture %}
+            {{ my_include | markdownify }}
+        </div>
+        {% endif %}
+    </header>
+</section>{% endraw %}
+```
+
+The one non-obvious section of the above code-snippet is the capturing of a variable called `my_include` followed by piping it as `markdownify`. This allows us to render a markdown include as styled `html` and inject it into the `<div>` as the main content.
+
+For each of the sections which you are including, be sure to create the corresponding `.md` files, also inside the `_includes` directory.
+
+By now, you should have all the basic content for your portfolio and blog, **congratulations!**
