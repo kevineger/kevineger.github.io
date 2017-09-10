@@ -79,7 +79,7 @@ By adding the predefined `layout` variable to your front matter, you'll notice t
 
 ### Themes and Layouts
 
-By default, your portfolio is using the minima theme (check `_config.yml` to verify). As we just saw, adding `layout: post` to the front matter seems to add magical styling and render the post inside our site (the navbar is still visible at the top). 
+By default, your portfolio is using the minima theme (check `_config.yml` to verify). As we just saw, adding `layout: post` to the front matter seems to add magical styling and render the post inside our site (the navbar is still visible at the top).
 
 What actually happens under the hood is Jekyll sees the `post` layout defined, and takes all the content from the file, and renders it as _content_ inside the `post` layout. 
 
@@ -91,11 +91,11 @@ To override the theme's default `post` layout, we need to make a copy in a `_lay
 1. Using the returned location, make a copy of the file into the location highlighted above.
 1. You do you. Make all the modifications you want. For this tutorial, I will be sticking with the default layout.
 
-## This is cool, but I'm building a portfolio.
+## This is cool, but I'm building a portfolio
 
 _Enough of this blogging crap_ the crowd screamed... _I came here to build a portfolio_.
 
-If we look at `index.md`, the entry point to our website, all that's defined is the font matter `layout` variable. Let's go ahead and change it to `layout: default`. 
+<!-- If we look at `index.md`, the entry point to our website, all that's defined is the font matter `layout` variable. Let's go ahead and change it to `layout: default`. 
 
 Go ahead and create the directory and file:`_layouts/default.html`
 
@@ -117,11 +117,11 @@ To start, I'll copy the `default` layout for the minima theme using the steps ou
 </html>{% endraw %}
 ```
 
-Now, if you refresh you browser you should notice **that nothing changed**! This is expected, after all we are using the same layout.
+Now, if you refresh you browser you should notice **that nothing changed**! This is expected, after all we are using the same layout. -->
 
 Before we start making changes to the layout, let's break apart what we want our portfolio to have.
 
-- A top level navbar to switch between a portfolio, a blog (if you want one) and an about page
+- A top level navbar to switch between a portfolio (our site's home page), a blog (if you want one) and an about page
 - A downloadable version of a resume
 - Sections on the portfolio page for all our different chunks of information (ie: work experience, education, projects, etc.)
 - A little bit of sexiness through themes/styling
@@ -132,35 +132,31 @@ With our goals in mind, let's tackle them one at a time.
 
 #### Breaking up pages
 
-Before we make changes to the navigation, let's go ahead and make our portfolio and blog explicit **pages** in our application. We will start by basing these pages off the `about.md` located in our root directory. The important things to note are that the `about.md` page specifies `layout: page`, a `title` and a `permalink`.
+Before we make changes to the navigation, let's go ahead and make our blog an explicit **page** in our application. We will start by basing this page off of the `about.md` page located in our root directory. The important things to note are that the `about.md` page specifies `layout: page`, a `title` and a `permalink` in the front matter.
 
-Create a `portfolio.md` page with dummy content, it should look something like this:
+Create a `blog.md` page with dummy content, it should look something like this:
 
 ```md
 ---
 layout: page
-title: Portfolio
-permalink: /portfolio/
+title: Blog
+permalink: /blog/
 ---
 
-This is my dope-ass new portfolio
+This is my dope-ass new blog
 ```
 
-By simply adding this page, you should notice upon refreshing that _Portfolio_ now auto-magically appears in the navbar, and the `http://localhost:4000/portfolio/` link brings you to your _dope-ass new portfolio_.
-
-Repeat this process for a `blog.md` page.
+By simply adding this page, you should notice upon refreshing that _Blog_ now auto-magically appears in the navbar, and the `http://localhost:4000/blog/` URL brings you to your _dope-ass new blog_.
 
 #### Modifying the existing plumbing
 
-By now, our navbar has _[Name defined in config]'s Portfolio_ as a clickable link which takes you to the root page and _About_, _Blog_ and _Portfolio_ links which take you to the corresponding dummy pages.
+<!-- Take a look at the `default.html` layout which was copied over and exists in our project. There are two important pieces to explore:
 
-Take a look at the `_default.html` layout which was copied over and exists in our project. There are two important pieces to explore:
+`{% raw %}{% include header.html %}{% endraw %}`: uses the [include template](https://jekyllrb.com/docs/templates/#includes) and inserts the corresponding markup file wherever specified.
 
-The `{% raw %}{% include header.html %}{% endraw %}` piece uses the [include template](https://jekyllrb.com/docs/templates/#includes) and inserts the corresponding markup file wherever specified.
+`{% raw %}{{ content }}{% endraw %}`: is the injected section after the front matter block in the markup file that _invoked_ the layout.
 
-The `{% raw %}{{ content }}{% endraw %}` is the section after the front matter block in the markup file that _invoked_ the layout. 
-
-To override the _minima_ theme's markup for the navbar, let's do as we did for the `_default.html` layout and copy it into our local `_includes` folder (you'll need to create this).
+To override the _minima_ theme's markup for the navbar, let's do as we did for the `default.html` layout and copy it into our local `_includes` folder (you'll need to create this).
 
 Note: again, it is vital that you name the new file with the [same name as the one you are overriding](https://jekyllrb.com/docs/themes/#overriding-theme-defaults). Alternatively, you can change the name of the include to your file name of choice.
 
@@ -200,18 +196,17 @@ Note: again, it is vital that you name the new file with the [same name as the o
 
 From this file, it is clear that our newly added pages were auto-magically being piped in due to the for-loop that looks at the paths defined. We can also see that things like the `site-title` are grabbed from the `_config.yml` variables. Go ahead an make any changes you'd like. For myself, I'm editing the site title to just be my name.
 
-Note: Don't forget to re-serve the page when making changes to the `_config.yml`.
+Note: Don't forget to re-serve the page when making changes to the `_config.yml`. -->
 
 Current status of our existing site:
 
 - The root page has the content we'd ideally like for our _Blog_ page
-- The blog page just has the empty dummy content we entered
-- The portfolio page also just has dummy content, but it isn't shown as the _Home_ page just as we'd like to when a user navigates to the root
-- The _About_ page has the info it should (change at your convenience)
+- The _Blog_ page just has the empty dummy content we entered
+- The _About_ page has the info it should (change at your own convenience)
 
 Let's fix these in order.
 
-Make the blog page `html` and with the following markup:
+Change the blog page to be an `html` page and with the following markup:
 
 ```html
 {% raw %}---
@@ -238,14 +233,14 @@ permalink: /blog/
 </div>{% endraw %}
 ```
 
-Change `portfolio.md` to render the `home` layout:
+`index.md` is the page our site loads for it's root, and where we want our portfolio to exist. Noting that all this page does is define Front Matter that references `minima`'s `home` layout, let's go ahead and override that. As explained in the [Themes and Layouts](#themes-and-layouts) section of this post, go ahead and override the default home behaviiour by creating a new `home.md` file in the `_layouts` directory and temporarily fill it with dummy content.
 
-```md
+```html
 ---
-layout: home
-title: Portfolio
-permalink: /portfolio/
+layout: default
 ---
+
+<div class="home">
+  <h1>Portfolio info goes here</h1>
+</div>
 ```
-
-Create a new `home.md` file in the `_layouts` directory.
