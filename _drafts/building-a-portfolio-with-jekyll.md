@@ -241,6 +241,31 @@ layout: default
 ---
 
 <div class="home">
-  <h1>Portfolio info goes here</h1>
+  <h1>Hire me plz, thx.</h1>
 </div>
+```
+
+In an ideal world, employers already know how awesome we are and our portfolio is done with something like the following!
+![Basic portfolio rendering]({{ site.url }}/assets/img/hello_world_portfolio.png)
+
+Unfortunately, our world is far from ideal. But that's more of an existensial conversation that we'll table for now. Let's concentrate on continuing to build awesome things with Jekyll.
+
+As I see it, there are two wasy to fundamentally show your portfolio off.
+
+1. In a clean single page layout with obvious blocking and succinct navigation
+1. In a page-based flow, where each portfolio item (ie: work experience, education, etc.) is on a different page.
+
+I will be opting for the prior method, but if you do want to have separate pages and leverage Jekyll's custom collections - check out [Max Antonucci's blog post](http://newhaven.io/blog/creating-jekyll-portfolio-page/)!
+
+One of the fundamental template tags we will leverage is `{% raw %}{% include header.html %}{% endraw %}`. The [include template](https://jekyllrb.com/docs/templates/#includes) will allow us to use partials to inject the corresponding markup wherever specified. Let's pencil these out in our `home.html` and add the files to the `_includes` directory.
+
+```html
+{% raw %}<div class="home">
+  <h1>Hire me plz, thx.</h1>
+  {% include objective.html %}
+  {% include experience.html %}
+  {% include education.html %}
+  {% include projects.html %}
+  {% include skills.html %}
+</div>{% endraw %}
 ```
