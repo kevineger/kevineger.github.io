@@ -1,4 +1,14 @@
-// section.portfolio {
-//     border: 1px solid black;
-//     padding: 20px;
-// }
+body {
+    background-color: $body-color;
+}
+
+section.portfolio {
+    background-color: $section-color;
+    margin: 40px 0;
+    padding: 40px;
+    box-shadow: 0 0 0 0, 0 6px 12px rgba(34, 34, 34, 0.1);
+    border-radius: 3px;
+    p {
+        margin: 0;
+    }
+}

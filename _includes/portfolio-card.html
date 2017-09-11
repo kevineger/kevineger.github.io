@@ -4,11 +4,10 @@
             <!-- <img src="{{ include.decal-img }}" alt="Decorative decal for the {{ include.title }} section"> -->
             {{ include.title }}
         </h1>
-        {% if include.content %}
-        <div>
-            {% capture my_include %}{% include {{ include.content }} %}{% endcapture %}
-            {{ my_include | markdownify }}
-        </div>
-        {% endif %}
     </header>
+    {% if include.content %}
+    <div>
+        {% capture my_include %}{% include portfolio/{{ include.content }} %}{% endcapture %} {{ my_include | markdownify }}
+    </div>
+    {% endif %}
 </section>

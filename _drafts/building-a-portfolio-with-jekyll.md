@@ -95,30 +95,6 @@ To override the theme's default `post` layout, we need to make a copy in a `_lay
 
 _Enough of this blogging crap_ the crowd screamed... _I came here to build a portfolio_.
 
-<!-- If we look at `index.md`, the entry point to our website, all that's defined is the font matter `layout` variable. Let's go ahead and change it to `layout: default`. 
-
-Go ahead and create the directory and file:`_layouts/default.html`
-
-To start, I'll copy the `default` layout for the minima theme using the steps outlined above. For the lazy, go ahead and copy-paste this:
-
-```html
-{% raw %}<!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "en" }}">
-  {% include head.html %}
-  <body>
-    {% include header.html %}
-    <main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        {{ content }}
-      </div>
-    </main>
-    {% include footer.html %}
-  </body>
-</html>{% endraw %}
-```
-
-Now, if you refresh you browser you should notice **that nothing changed**! This is expected, after all we are using the same layout. -->
-
 Before we start making changes to the layout, let's break apart what we want our portfolio to have.
 
 - A top level navbar to switch between a portfolio (our site's home page), a blog (if you want one) and an about page
@@ -149,54 +125,6 @@ This is my dope-ass new blog
 By simply adding this page, you should notice upon refreshing that _Blog_ now auto-magically appears in the navbar, and the `http://localhost:4000/blog/` URL brings you to your _dope-ass new blog_.
 
 #### Modifying the existing plumbing
-
-<!-- Take a look at the `default.html` layout which was copied over and exists in our project. There are two important pieces to explore:
-
-`{% raw %}{% include header.html %}{% endraw %}`: uses the [include template](https://jekyllrb.com/docs/templates/#includes) and inserts the corresponding markup file wherever specified.
-
-`{% raw %}{{ content }}{% endraw %}`: is the injected section after the front matter block in the markup file that _invoked_ the layout.
-
-To override the _minima_ theme's markup for the navbar, let's do as we did for the `default.html` layout and copy it into our local `_includes` folder (you'll need to create this).
-
-Note: again, it is vital that you name the new file with the [same name as the one you are overriding](https://jekyllrb.com/docs/themes/#overriding-theme-defaults). Alternatively, you can change the name of the include to your file name of choice.
-
-`_includes/header.html`:
-
-```html
-{% raw %}<header class="site-header" role="banner">
-  <div class="wrapper">
-    {% assign default_paths = site.pages | map: "path" %}
-    {% assign page_paths = site.header_pages | default: default_paths %}
-    <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
-    {% if page_paths %}
-      <nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
-              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
-              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
-            </svg>
-          </span>
-        </label>
-        <div class="trigger">
-          {% for path in page_paths %}
-            {% assign my_page = site.pages | where: "path", path | first %}
-            {% if my_page.title %}
-            <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </nav>
-    {% endif %}
-  </div>
-</header>{% endraw %}
-```
-
-From this file, it is clear that our newly added pages were auto-magically being piped in due to the for-loop that looks at the paths defined. We can also see that things like the `site-title` are grabbed from the `_config.yml` variables. Go ahead an make any changes you'd like. For myself, I'm editing the site title to just be my name.
-
-Note: Don't forget to re-serve the page when making changes to the `_config.yml`. -->
 
 Current status of our existing site:
 
@@ -283,19 +211,105 @@ Create the `portfolio-card.html` template inside the `_includes` directory with 
 ```html
 {% raw %}<section class="portfolio">
     <header>
-        <h1>{{ include.title }}</h1>
-        {% if include.content %}
-        <div>
-            {% capture my_include %}{% include {{ include.content }} %}{% endcapture %}
-            {{ my_include | markdownify }}
-        </div>
-        {% endif %}
+        <h1>
+            {{ include.title }}
+        </h1>
     </header>
+    {% if include.content %}
+    <div>
+        {% capture my_include %}{% include portfolio/{{ include.content }} %}{% endcapture %} {{ my_include | markdownify }}
+    </div>
+    {% endif %}
 </section>{% endraw %}
 ```
 
-The one non-obvious section of the above code-snippet is the capturing of a variable called `my_include` followed by piping it as `markdownify`. This allows us to render a markdown include as styled `html` and inject it into the `<div>` as the main content.
+I highly advise giving the [_Includes_](https://jekyllrb.com/docs/includes/) section of Jekyll's documentation a read - specifically the explanation on passing variables to the partials. The one non-obvious section of the above code-snippet is the capturing of a variable called `markdown_include` followed by piping it as `markdownify`. This allows us to render a markdown include as styled `html` and inject it into the `<div>` as the main content.
 
 For each of the sections which you are including, be sure to create the corresponding `.md` files, also inside the `_includes` directory.
 
 By now, you should have all the basic content for your portfolio and blog, **congratulations!**
+
+## Make it look sexy
+
+<div style="width:100%;height:0;padding-bottom:75%;position:relative;"><iframe src="https://giphy.com/embed/wAjfQ9MLUfFjq" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/batman-look-whoa-wAjfQ9MLUfFjq">via GIPHY</a></p>
+
+Now on to the fun part, making your portfolio look nice! Your portfolio should now have all the content in a nice and structured way and look something like the following:
+
+![Portfolio without styling]({{ site.url }}/assets/img/portfolio_no_styling.png)
+
+### Setting yourself up to style
+
+Remember when I said: "_For each of the sections on the portfolio, we are rendering some content into a `portfolio-card.html` template that we will later leverage for styling._"? Well now's that time! Let's get some `scss` up in here.
+
+In the `assets/` folder, create a `css/` folder and a `site.scss` file. Jekyll is smart enough to automatically convert `sass` and `scss` to `css` and follow the same directory structure (which is easily overridable if you need).
+
+Since we're going to be adding stylesheets we are going to need the `head.html` include with the addition of our newly added `site.scss` sheet.
+
+```html
+{% raw %}<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
+    <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
+
+    <link rel="stylesheet" href="{{ site.url }}/assets/main.css">
+    <link rel="stylesheet" href="{{ site.url }}/assets/css/site.css">
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ " /feed.xml
+        " | relative_url }}"> {% if jekyll.environment == 'production' and site.google_analytics %} {% include google-analytics.html %} {% endif %}
+</head>{% endraw %}
+```
+
+In `site.scss` we will be importing all the partial stylesheets we create, start by stubbing out a `page-layout` partial.
+
+`site.scss`:
+```scss
+---
+sitemap: false
+---
+
+// Partials
+@import "page-layout";
+```
+
+As the [Jekyll docs point out](https://jekyllrb.com/docs/assets/#sassscss), if you are using Sass `@import` statements, you’ll need to ensure that your `sass_dir` is set to the base directory that contains your Sass files. You can do that thusly in your `_config.yml`:
+
+```yml
+sass:
+    sass_dir: _sass
+```
+
+The docs advise you create all `scss` partial files inside a `_scss` directory, so let's do that for the `page-layout` file we've stubbed out and imported. For now we'll just put a basic border with some padding around each portfolio section to make sure everything's working.
+
+`_scss/page-layout.scss`:
+
+```scss
+section.portfolio {
+    border: 1px solid black;
+    padding: 20px;
+}
+```
+
+Once you've verified everything is working, let's [get jiggy wit it](https://www.youtube.com/watch?v=3JcmQONgXJM)!
+
+### Advanced Styling
+
+One of Sass' greatest benefits is it's use of variables, a way to store information that you want to reuse throughout your stylesheet. You can store things like colors, font stacks, or any CSS value you think you'll want to reuse. Sass uses the $ symbol to make something a variable. It's great practice to have a (or several) variable sheet(s) declared.
+
+`/_sass/variables.scss`:
+```scss
+// Colours
+$base-color: rgba(#222, 0.8);
+$body-color: #e8e8e8;
+$text-color: rgba(#222, 0.8);
+$comp-color: complement(#222);
+$border-color: lighten($base-color, 60);
+$link-color: rgba(#222, 0.8);
+$primary: #222;
+$success: #5cb85c;
+$warning: #dd8338;
+$danger: #C64537;
+$info: #308cbc;
+```
