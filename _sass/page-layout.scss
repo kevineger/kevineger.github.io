@@ -6,8 +6,16 @@ section.portfolio {
     background-color: $section-color;
     margin: 40px 0;
     padding: 40px;
-    box-shadow: 0 0 0 0, 0 6px 12px rgba(34, 34, 34, 0.1);
+    box-shadow: 0 0 0 0, 0 0px 25px rgba(34, 34, 34, 0.15);
     border-radius: 3px;
+    position: relative;
+    .decal {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        max-width: 50px;
+        max-height: 50px;
+    }
     p {
         margin: 0;
     }

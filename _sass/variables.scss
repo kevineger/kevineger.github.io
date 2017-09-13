@@ -11,3 +11,10 @@ $success: #5cb85c;
 $warning: #dd8338;
 $danger: #C64537;
 $info: #308cbc;
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+// @import url('https://fonts.googleapis.com/css?family=Vollkorn');
+$heading-font : 'Ubuntu', sans-serif;
+// $paragraph-font : 'Vollkorn', serif;
+$paragraph-font : 'Ubuntu', serif;

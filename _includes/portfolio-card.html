@@ -1,10 +1,13 @@
 <section class="portfolio">
-    <header>
+    <header class="card-title">
         <h1>
             <!-- <img src="{{ include.decal-img }}" alt="Decorative decal for the {{ include.title }} section"> -->
             {{ include.title }}
         </h1>
     </header>
+    {% if include.decal-img %}
+    <img class="decal" src="{{ site.url }}/assets/img/{{ include.decal-img }}" alt="Decorative decal for the {{ include.title }} section">
+    {% endif %}
     {% if include.content %}
     <div>
         {% capture my_include %}{% include portfolio/{{ include.content }} %}{% endcapture %} {{ my_include | markdownify }}

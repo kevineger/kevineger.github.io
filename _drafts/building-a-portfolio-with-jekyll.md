@@ -296,7 +296,7 @@ Once you've verified everything is working, let's [get jiggy wit it](https://www
 
 ### Advanced Styling
 
-One of Sass' greatest benefits is it's use of variables, a way to store information that you want to reuse throughout your stylesheet. You can store things like colors, font stacks, or any CSS value you think you'll want to reuse. Sass uses the $ symbol to make something a variable. It's great practice to have a (or several) variable sheet(s) declared.
+One of Sass' greatest benefits is it's use of variables, a way to store information that you want to reuse throughout your stylesheet. You can store things like colors, font stacks, or any CSS value you think you'll want to reuse. Sass uses the `$` symbol to make something a variable. It's great practice to have a (or several) variable sheet(s) declared.
 
 `/_sass/variables.scss`:
 ```scss
@@ -313,3 +313,25 @@ $warning: #dd8338;
 $danger: #C64537;
 $info: #308cbc;
 ```
+
+Let's clean up our portfolio page, giving the body a light background and the sections their own card-like containers with a bit of a shadow:
+
+```scss
+body {
+    background-color: $body-color;
+}
+
+section.portfolio {
+    background-color: $section-color;
+    margin: 40px 0;
+    padding: 40px;
+    box-shadow: 0 0 0 0, 0 6px 12px rgba(34, 34, 34, 0.1);
+    border-radius: 3px;
+    p {
+        margin: 0;
+    }
+}
+```
+
+Rather than just use the default Helvetica font, let's stylize our family a bit to make it pop. Adding the following variable to the variables: `$base-font : 'Lato', Calibri, Arial, sans-serif;` and assigning that font-family to our body `font-family: $base-font;`.
+
