@@ -2,7 +2,12 @@ body {
     background-color: $body-color;
 }
 
-section.card {
+header.site-header {
+    background-color: $header-color;
+}
+
+section.card,
+article.post {
     background-color: $section-color;
     margin: 40px 0;
     padding: 40px;
@@ -30,7 +35,7 @@ section.card {
             margin-bottom: 5px;
             color: $secondary-color;
             font-size: 1.3em;
-        }   
+        }
     }
     p {
         margin: 0;
