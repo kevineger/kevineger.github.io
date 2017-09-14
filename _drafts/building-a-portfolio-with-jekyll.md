@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Building a Portfolio with Jekyll
+author: Kevin Eger
 ---
 
 ## So you need to build a portfolio...
@@ -38,17 +39,42 @@ Once you've got a working Ruby environment set up, go ahead and create a new Jek
 ```
 
 When you navigate to the port listed above in a browser, you should now see the following:
-<!--TODO: Insert image here  -->
+
+![Hello, World! New Jekyll site.]({{ site.url }}/assets/img/hello_world_jekyll.png)
 
 ### Exploring our World
 
-By creating a new Jekyll project from the terminal, you should get a directory structure like the following:
+[A basic Jekyll site usually looks something like this](https://jekyllrb.com/docs/structure/):
+
+```text
+├── _config.yml
+├── _data
+|   └── members.yml
+├── _drafts
+|   ├── begin-with-the-crazy-ideas.md
+|   └── on-simplicity-in-technology.md
+├── _includes
+|   ├── footer.html
+|   └── header.html
+├── _layouts
+|   ├── default.html
+|   └── post.html
+├── _posts
+|   ├── 2007-10-29-why-every-programmer-should-play-nethack.md
+|   └── 2009-04-26-barcamp-boston-4-roundup.md
+├── _sass
+|   ├── _base.scss
+|   └── _layout.scss
+├── _site
+├── .jekyll-metadata
+└── index.html # can also be an 'index.md' with valid YAML Frontmatter
+```
 
 <!--TODO: Insert directory structure  -->
 
-At it's core, Jekyll is simply a text transformation engine. Input text (in your favourite markup language) and outputs layout(s) files. For a deeper dive into the directory structure and full descriptions of what each file/directory is for, view the [Jekyll docs](https://jekyllrb.com/docs/structure/).
+At it's core, Jekyll is simply a text transformation engine. You input text (in your favourite markup language) and it outputs layout files. For a deeper dive into the directory structure and full descriptions of what each file/directory is for, view the [Jekyll docs](https://jekyllrb.com/docs/structure/).
 
-For the sake of this tutorial, let's get a hands-on view of what we have. 
+For the sake of this tutorial, let's get a hands-on view of what we have.
 
 #### _config.yml
 Jekyll uses a _config.yml_ file for configuration. Go ahead and fill in the title, email, description and social handles. Upon making changes, stop serving the site and rebundle and serve it by executing `bundle exec jekyll serve` as before. Note that this is only necessary when configuration changes are made. Verify your changes are reflected in the browser.
@@ -62,9 +88,9 @@ As I write this blog post, I am doing it directly in the portfolio I'm creating.
 
 ### Front Matter
 <!--TODO: Word definition formatting  -->
-Front Matter: _the pages, such as the title page and preface, that precede the main text of a book._
+> _The pages, such as the title page and preface, that precede the main text of a book._
 
-In a Jekyll setting, Front Matter tells Jekyll that this file is special and to treat the values between the triple-dashed lines as configuration.
+In a Jekyll setting, _Front Matter_ tells Jekyll that this file is special and to treat the values between the triple-dashed lines as configuration.
 
 Add the following YAML front matter block to the post you created:
 
@@ -81,7 +107,7 @@ By adding the predefined `layout` variable to your front matter, you'll notice t
 
 By default, your portfolio is using the minima theme (check `_config.yml` to verify). As we just saw, adding `layout: post` to the front matter seems to add magical styling and render the post inside our site (the navbar is still visible at the top).
 
-What actually happens under the hood is Jekyll sees the `post` layout defined, and takes all the content from the file, and renders it as _content_ inside the `post` layout.
+What actually happens under the hood is Jekyll sees the `post` layout defined, takes all the content from the file, and renders it as _content_ inside the `post` layout.
 
 But where does that layout live? How can I make edits to it if I don't like the layout? I highly advise you give the [documentation on themes](https://jekyllrb.com/docs/themes/) a read, but at a high level: some of the site’s directories (such as the `assets`, `_layouts`, `_includes`, and `_sass` directories) are stored in the theme’s gem, hidden from your immediate view. Yet all of the necessary directories will be read and processed during Jekyll’s build process.
 
@@ -174,6 +200,7 @@ layout: default
 ```
 
 In an ideal world, employers already know how awesome we are and our portfolio is done with something like the following!
+
 ![Basic portfolio rendering]({{ site.url }}/assets/img/hello_world_portfolio.png)
 
 Unfortunately, our world is far from ideal. But that's more of an existential conversation that we'll table for now. Let's concentrate on continuing to build awesome things with Jekyll.
@@ -183,28 +210,25 @@ As I see it, there are two ways to fundamentally show your portfolio off.
 1. In a clean single page layout with obvious blocking and succinct navigation
 1. In a page-based flow, where each portfolio item (ie: work experience, education, etc.) is on a different page.
 
-I will be opting for the prior method, but if you do want to have separate pages and leverage Jekyll's custom collections - check out [Max Antonucci's blog post](http://newhaven.io/blog/creating-jekyll-portfolio-page/)!
+I will be opting for the former method, but if you do want to have separate pages and leverage Jekyll's custom collections - check out [Max Antonucci's blog post](http://newhaven.io/blog/creating-jekyll-portfolio-page/)!
 
 One of the fundamental template tags we will leverage is `{% raw %}{% include some_file.MARKUP %}{% endraw %}`. The [include template](https://jekyllrb.com/docs/templates/#includes) will allow us to use partials to inject the corresponding markup wherever specified. Let's pencil these out in our `home.html` and add the files to the `_includes` directory.
 
 ```html
-{% raw %}--- 
+{% raw %}---
 layout: default
 ---
 
-<div class="home">
-  <h1>Hire me plz, thx.</h1>
-  {% include card.html title="Objective" content="objective.md" %}
-  {% include card.html title="Experience" content="experience.md" %}
-  {% include card.html title="Education" content="education.md" %}
-  {% include card.html title="Projects" content="projects.md" %}
-  {% include card.html title="Skills" content="skills.md" %}
-</div>{% endraw %}
+{% include card.html title="Objective" markdown-content="objective.md"%}
+{% include card.html title="Experience" markdown-content="experience.md" %}
+{% include card.html title="Education" markdown-content="education.md" %}
+{% include card.html title="Projects" markdown-content="projects.md" %}
+{% include card.html title="Skills" markdown-content="skills.md"%}{% endraw %}
 ```
 
-Pro-tip: Write the content of your sections separate from implementing the site. I've found it's easiest to do these two things in isolation. Use lorem-ipsum text as a placeholder until you have the actual content.
+> Pro-tip: Write the content of your sections separate from implementing the site. I've found it's easiest to do these two things in isolation. Use lorem-ipsum text as a placeholder until you have the actual content.
 
-For each of the sections on the portfolio, we are rendering some _content_ into a `card.html` template that we will later leverage for styling.
+For each of the sections on the portfolio, we are rendering some `markdown-content` into a `card.html` template that we will later leverage for styling.
 
 Create the `card.html` template inside the `_includes` directory with the following:
 
@@ -235,7 +259,7 @@ By now, you should have all the basic content for your portfolio and blog, **con
 
 <div style="width:100%;height:0;padding-bottom:75%;position:relative;"><iframe src="https://giphy.com/embed/wAjfQ9MLUfFjq" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/batman-look-whoa-wAjfQ9MLUfFjq">via GIPHY</a></p>
 
-Now on to the fun part, making your portfolio look nice! Your portfolio should now have all the content in a nice and structured way and look something like the following:
+Now on to the fun part, making your portfolio look nice! Your portfolio should now have all the content in a semi-structured format:
 
 ![Portfolio without styling]({{ site.url }}/assets/img/portfolio_no_styling.png)
 
@@ -433,11 +457,19 @@ Add the following class styling inside our `section.portfolio` styling:
     h1 {
         font-weight: bold;
         line-height: 0.75em;
+        display: inline;
     }
     h2 {
         margin-bottom: 5px;
         color: $secondary-color;
         font-size: 1.3em;
     }
-}
+    h3 {
+        margin: 0;
+    }
+    p.date {
+        float: right;
+        color: $secondary-color;
+        }
+    }
 ```

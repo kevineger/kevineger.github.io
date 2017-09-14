@@ -4,7 +4,6 @@ title: Blog
 permalink: /blog/
 ---
 
-{% capture blog_content %}
 <ul class="post-list">
   {% for post in site.posts %}
   <li>
@@ -17,7 +16,4 @@ permalink: /blog/
   </li>
   {% endfor %}
 </ul>
-<p class="rss-subscribe">subscribe <a href="{{ " /feed.xml " | relative_url }}">via RSS</a></p>
-{% endcapture %}
-
-{% include card.html title="Posts" html-content=blog_content %}
+<p class="rss-subscribe">subscribe <a href="{{ " /feed.xml " | relative_url }}">via RSS</a></p> 
