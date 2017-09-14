@@ -209,17 +209,19 @@ For each of the sections on the portfolio, we are rendering some _content_ into 
 Create the `card.html` template inside the `_includes` directory with the following:
 
 ```html
-{% raw %}<section class="portfolio">
+{% raw %}<section class="card">
     <header class="card-title">
         <h1>
             {{ include.title }}
         </h1>
     </header>
-    {% if include.content %}
     <div class="card-content">
-        {% capture my_include %}{% include portfolio/{{ include.content }} %}{% endcapture %} {{ my_include | markdownify }}
+        <!-- Markdown Content -->
+        {% if include.markdown-content %}
+            {% capture my_include %}{% include portfolio/{{ include.markdown-content }} %}{% endcapture %}
+            {{ my_include | markdownify }}
+        {% endif %}
     </div>
-    {% endif %}
 </section>{% endraw %}
 ```
 
@@ -366,20 +368,22 @@ layout: default
 
 `card.html`:
 ```html
-{% raw %}<section class="portfolio">
+{% raw %}<section class="card">
     <header class="card-title">
         <h1>
             {{ include.title }}
         </h1>
     </header>
-    {% if include.decal-img != "" %}
+    {% if include.decal-img and include.decal-img != "" %}
     <img class="decal" src="{{ site.url }}/assets/img/{{ include.decal-img }}" alt="Decorative decal for the {{ include.title }} section">
     {% endif %}
-    {% if include.content %}
     <div class="card-content">
-        {% capture my_include %}{% include portfolio/{{ include.content }} %}{% endcapture %} {{ my_include | markdownify }}
+        <!-- Markdown Content -->
+        {% if include.markdown-content %}
+            {% capture my_include %}{% include portfolio/{{ include.markdown-content }} %}{% endcapture %}
+            {{ my_include | markdownify }}
+        {% endif %}
     </div>
-    {% endif %}
 </section>{% endraw %}
 ```
 
