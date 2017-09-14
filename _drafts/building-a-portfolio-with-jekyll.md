@@ -194,29 +194,29 @@ layout: default
 
 <div class="home">
   <h1>Hire me plz, thx.</h1>
-  {% include portfolio-card.html title="Objective" content="objective.md" %}
-  {% include portfolio-card.html title="Experience" content="experience.md" %}
-  {% include portfolio-card.html title="Education" content="education.md" %}
-  {% include portfolio-card.html title="Projects" content="projects.md" %}
-  {% include portfolio-card.html title="Skills" content="skills.md" %}
+  {% include card.html title="Objective" content="objective.md" %}
+  {% include card.html title="Experience" content="experience.md" %}
+  {% include card.html title="Education" content="education.md" %}
+  {% include card.html title="Projects" content="projects.md" %}
+  {% include card.html title="Skills" content="skills.md" %}
 </div>{% endraw %}
 ```
 
 Pro-tip: Write the content of your sections separate from implementing the site. I've found it's easiest to do these two things in isolation. Use lorem-ipsum text as a placeholder until you have the actual content.
 
-For each of the sections on the portfolio, we are rendering some _content_ into a `portfolio-card.html` template that we will later leverage for styling.
+For each of the sections on the portfolio, we are rendering some _content_ into a `card.html` template that we will later leverage for styling.
 
-Create the `portfolio-card.html` template inside the `_includes` directory with the following:
+Create the `card.html` template inside the `_includes` directory with the following:
 
 ```html
 {% raw %}<section class="portfolio">
-    <header>
+    <header class="card-title">
         <h1>
             {{ include.title }}
         </h1>
     </header>
     {% if include.content %}
-    <div>
+    <div class="card-content">
         {% capture my_include %}{% include portfolio/{{ include.content }} %}{% endcapture %} {{ my_include | markdownify }}
     </div>
     {% endif %}
@@ -239,7 +239,7 @@ Now on to the fun part, making your portfolio look nice! Your portfolio should n
 
 ### Setting yourself up to style
 
-Remember when I said: "_For each of the sections on the portfolio, we are rendering some content into a `portfolio-card.html` template that we will later leverage for styling._"? Well now's that time! Let's get some `scss` up in here.
+Remember when I said: "_For each of the sections on the portfolio, we are rendering some content into a `card.html` template that we will later leverage for styling._"? Well now's that time! Let's get some `scss` up in here.
 
 In the `assets/` folder, create a `css/` folder and a `site.scss` file. Jekyll is smart enough to automatically convert `sass` and `scss` to `css` and follow the same directory structure (which is easily overridable if you need).
 
@@ -302,16 +302,9 @@ One of Sass' greatest benefits is it's use of variables, a way to store informat
 ```scss
 // Colours
 $base-color: rgba(#222, 0.8);
-$body-color: #e8e8e8;
-$text-color: rgba(#222, 0.8);
-$comp-color: complement(#222);
-$border-color: lighten($base-color, 60);
-$link-color: rgba(#222, 0.8);
-$primary: #222;
-$success: #5cb85c;
-$warning: #dd8338;
-$danger: #C64537;
-$info: #308cbc;
+$secondary-color: rgba(#222, 0.7);
+$body-color: rgb(238, 238, 238);
+$section-color: rgb(244, 245, 246);
 ```
 
 Let's clean up our portfolio page, giving the body a light background and the sections their own card-like containers with a bit of a shadow:
@@ -325,13 +318,122 @@ section.portfolio {
     background-color: $section-color;
     margin: 40px 0;
     padding: 40px;
-    box-shadow: 0 0 0 0, 0 6px 12px rgba(34, 34, 34, 0.1);
+    box-shadow: 0 0 0 0, 0 0px 25px rgba(34, 34, 34, 0.15);
     border-radius: 3px;
+    position: relative;
     p {
         margin: 0;
     }
 }
 ```
 
-Rather than just use the default Helvetica font, let's stylize our family a bit to make it pop. Adding the following variable to the variables: `$base-font : 'Lato', Calibri, Arial, sans-serif;` and assigning that font-family to our body `font-family: $base-font;`.
+Rather than just use the default Helvetica font, let's stylize our family a bit to make it pop.
 
+I've chosen to import the Ubuntu font from Google Fonts, and specified the variable in my `variables.scss`:
+
+```scss
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+$base-font : 'Ubuntu', serif;
+```
+
+Create a new `typography.scss` sheet (be sure to import it in `site.scss`), and add to the body:
+
+```scss
+body {
+    font-family: $base-font;
+}
+```
+
+One thing you may want to do is bring in images. Jekyll makes referencing static assets quite easy. Save whatever desired decals for your cards you which to have in the `assets/img` folder. To reference them, you can simply do it by path (ie: {{ site.url }}/assets/img/my_sweet_img.jpg).
+
+I'm opting to add an additional variable to my card include called `decal-img`, passing in the file name to the partial. This addition will require image files put into `assets/img`, the new variable set when the partial is invoked in `home.html`, an update to `card.html` to show it and updated styling. The latter three changes should look something like this:
+
+`home.html`:
+```html
+{% raw %}
+--- 
+layout: default
+---
+
+<div class="home">
+  {% include card.html title="Objective" decal-img="objective.svg" content="objective.md" %}
+  {% include card.html title="Experience" decal-img="experience.svg" content="experience.md" %}
+  {% include card.html title="Education" decal-img="education.svg" content="education.md" %}
+  {% include card.html title="Projects" decal-img="projects.svg" content="projects.md" %}
+  {% include card.html title="Skills" decal-img="skills.svg" content="skills.md" %}
+</div>{% endraw %}
+```
+
+`card.html`:
+```html
+{% raw %}<section class="portfolio">
+    <header class="card-title">
+        <h1>
+            {{ include.title }}
+        </h1>
+    </header>
+    {% if include.decal-img != "" %}
+    <img class="decal" src="{{ site.url }}/assets/img/{{ include.decal-img }}" alt="Decorative decal for the {{ include.title }} section">
+    {% endif %}
+    {% if include.content %}
+    <div class="card-content">
+        {% capture my_include %}{% include portfolio/{{ include.content }} %}{% endcapture %} {{ my_include | markdownify }}
+    </div>
+    {% endif %}
+</section>{% endraw %}
+```
+
+`page-layout.scss`:
+```scss
+body {
+    background-color: $body-color;
+}
+
+section.portfolio {
+    background-color: $section-color;
+    margin: 40px 0;
+    padding: 40px;
+    box-shadow: 0 0 0 0, 0 0px 25px rgba(34, 34, 34, 0.15);
+    border-radius: 3px;
+    position: relative;
+    .decal {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        max-width: 50px;
+        max-height: 50px;
+    }
+    p {
+        margin: 0;
+    }
+}
+```
+
+The last piece of styling I'll guide you through is cleaning up the individual portfolio card's, the rest is up to you!
+
+To achieve a more hierarchical title scheme, the card title should be a bit larger and be on the same line as the decal image:
+
+```scss
+header.card-title {
+    display: inline;
+    font-size: 1.3em;
+}
+```
+
+The remaining headers in each of the cards should be a bit closer together, and it would be nice to have dates on the applicable fields.
+
+Add the following class styling inside our `section.portfolio` styling:
+
+```scss
+.card-content {
+    h1 {
+        font-weight: bold;
+        line-height: 0.75em;
+    }
+    h2 {
+        margin-bottom: 5px;
+        color: $secondary-color;
+        font-size: 1.3em;
+    }
+}
+```
