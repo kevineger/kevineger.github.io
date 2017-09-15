@@ -38,8 +38,11 @@ section.card {
     .card-content {
         h1 {
             font-weight: bold;
-            line-height: 0.75em;
-            display: inline;
+            margin-top: 15px;
+            margin-bottom: 0;
+            img {
+                height: 30px;
+            }
         }
         h2 {
             margin-bottom: 5px;

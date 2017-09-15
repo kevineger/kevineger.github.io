@@ -1,5 +1,8 @@
 # University of British Columbia (Okanagan)
 
+{:.date}
+9/12 - 5/16
+
 ## Honours BSc Computer Science
 
 - Computer Science representative of the Qualitative Sciences Course Union

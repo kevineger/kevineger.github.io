@@ -10,18 +10,20 @@
 - Worked closely with the design team to establish requirements, build user flows and influence the experience both as an app consumer and a developer consuming the APIs.
 - Ensured full _HIPAA PHI_ compliance with each feature set through design, documentation, auditing, implementation and security.
 
-<br>
-
 # BC Cancer Agency
+
+{:.date}
+5/15 - 9/15
 
 ## Software Developer Intern - Early Detection Group
 
 - Designed and developed an online system for monitoring chronic patients post-treatment.
 - Conducted usability studies and surveys to influence both the design and the solution.
 
-<br>
-
 # University of British Columbia
+
+{:.date}
+9/15 - 1/16
 
 ## Teaching Assistant
 
