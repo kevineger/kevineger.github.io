@@ -1,0 +1,63 @@
+body {
+    background-color: $body-color;
+}
+
+header.site-header {
+    background-color: $header-color;
+}
+
+section.card,
+article.post {
+    background-color: $section-color;
+    margin: 40px 0;
+    padding: 40px;
+    box-shadow: 0 0 0 0, 0 0px 25px rgba(34, 34, 34, 0.15);
+    border-radius: 3px;
+    position: relative;
+}
+
+section.card {
+    &:hover {
+        .decal {
+            opacity: 0.75;
+        }
+    }
+    .decal {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        max-width: 50px;
+        max-height: 50px;
+        opacity: 0.2;
+        -webkit-transition: opacity 150ms ease-in;
+        -moz-transition: opacity 150ms ease-in;
+        -ms-transition: opacity 150ms ease-in;
+        -o-transition: opacity 150ms ease-in;
+        transition: opacity 150ms ease-in;
+    }
+    .card-content {
+        h1 {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 0;
+            img {
+                height: 30px;
+            }
+        }
+        h2 {
+            margin-bottom: 5px;
+            color: $secondary-color;
+            font-size: 1.3em;
+        }
+        h3 {
+            margin: 0;
+        }
+        p.date {
+            float: right;
+            color: $secondary-color;
+        }
+    }
+    p {
+        margin: 0;
+    }
+}
