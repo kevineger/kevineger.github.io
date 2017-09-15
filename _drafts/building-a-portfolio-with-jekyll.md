@@ -2,6 +2,9 @@
 layout: post
 title: Building a Portfolio with Jekyll
 author: Kevin Eger
+keywords: jekyll, blog, portfolio, GitHub, pages, gh-pages, resume
+last_updated: September 15th, 2017
+summary: "A basic guide for getting started with Jekyll and approaching the creation of a online portfolio with a blog."
 ---
 
 ## So you need to build a portfolio...
@@ -136,7 +139,7 @@ With our goals in mind, let's tackle them one at a time.
 
 Before we make changes to the navigation, let's go ahead and make our blog an explicit **page** in our application. We will start by basing this page off of the `about.md` page located in our root directory. The important things to note are that the `about.md` page specifies `layout: page`, a `title` and a `permalink` in the front matter.
 
-Create a `blog.md` page with dummy content, it should look something like this:
+Create a `blog.md` page in the root directory with dummy content, it should look something like this:
 
 ```md
 ---
@@ -147,6 +150,7 @@ permalink: /blog/
 
 This is my dope-ass new blog
 ```
+{: data-title="/blog.md" .code-title }
 
 By simply adding this page, you should notice upon refreshing that _Blog_ now auto-magically appears in the navbar, and the `http://localhost:4000/blog/` URL brings you to your _dope-ass new blog_.
 
@@ -186,8 +190,9 @@ permalink: /blog/
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
 </div>{% endraw %}
 ```
+{: data-title="/blog.html" .code-title }
 
-`index.md` is the page our site loads for it's root, and where we want our portfolio to exist. Noting that all this page does is define Front Matter that references `minima`'s `home` layout, let's go ahead and override that. As explained in the [Themes and Layouts](#themes-and-layouts) section of this post, go ahead and override the default home behaviour by creating a new `home.md` file in the `_layouts` directory and temporarily fill it with dummy content.
+`index.md` is the page our site loads for it's root, and where we want our portfolio to exist. Noting that all this page does is define Front Matter that references `minima`'s `home` layout, let's go ahead and override that. As explained in the [Themes and Layouts](#themes-and-layouts) section of this post, go ahead and override the default home behaviour by creating a new `home.html` file in the `_layouts` directory and temporarily fill it with dummy content.
 
 ```html
 ---
@@ -198,6 +203,7 @@ layout: default
   <h1>Hire me plz, thx.</h1>
 </div>
 ```
+{: data-title="/_layouts/home.html" .code-title }
 
 In an ideal world, employers already know how awesome we are and our portfolio is done with something like the following!
 
@@ -211,22 +217,6 @@ As I see it, there are two ways to fundamentally show your portfolio off.
 1. In a page-based flow, where each portfolio item (ie: work experience, education, etc.) is on a different page.
 
 I will be opting for the former method, but if you do want to have separate pages and leverage Jekyll's custom collections - check out [Max Antonucci's blog post](http://newhaven.io/blog/creating-jekyll-portfolio-page/)!
-
-One of the fundamental template tags we will leverage is `{% raw %}{% include some_file.MARKUP %}{% endraw %}`. The [include template](https://jekyllrb.com/docs/templates/#includes) will allow us to use partials to inject the corresponding markup wherever specified. Let's pencil these out in our `home.html` and add the files to the `_includes` directory.
-
-```html
-{% raw %}---
-layout: default
----
-
-{% include card.html title="Objective" markdown-content="objective.md"%}
-{% include card.html title="Experience" markdown-content="experience.md" %}
-{% include card.html title="Education" markdown-content="education.md" %}
-{% include card.html title="Projects" markdown-content="projects.md" %}
-{% include card.html title="Skills" markdown-content="skills.md"%}{% endraw %}
-```
-
-> Pro-tip: Write the content of your sections separate from implementing the site. I've found it's easiest to do these two things in isolation. Use lorem-ipsum text as a placeholder until you have the actual content.
 
 For each of the sections on the portfolio, we are rendering some `markdown-content` into a `card.html` template that we will later leverage for styling.
 
@@ -248,10 +238,28 @@ Create the `card.html` template inside the `_includes` directory with the follow
     </div>
 </section>{% endraw %}
 ```
+{: data-title="/_includes/card.html" .code-title }
+
+One of the fundamental template tags we will leverage is `{% raw %}{% include some_file.MARKUP %}{% endraw %}`. The [include template](https://jekyllrb.com/docs/templates/#includes) will allow us to use partials to inject the corresponding markup wherever specified.
+
+```html
+{% raw %}---
+layout: default
+---
+
+{% include card.html title="Objective" markdown-content="objective.md"%}
+{% include card.html title="Experience" markdown-content="experience.md" %}
+{% include card.html title="Education" markdown-content="education.md" %}
+{% include card.html title="Projects" markdown-content="projects.md" %}
+{% include card.html title="Skills" markdown-content="skills.md"%}{% endraw %}
+```
+{: data-title="/_layouts/home.html" .code-title }
+
+For each of the sections which you are including, **be sure to create the corresponding `.md` files, inside an `_includes/portfolio` directory.**
+
+> Pro-tip: Write the content of your sections separate from implementing the site. I've found it's easiest to do these two things in isolation. Use lorem-ipsum text as a placeholder until you have the actual content.
 
 I highly advise giving the [_Includes_](https://jekyllrb.com/docs/includes/) section of Jekyll's documentation a read - specifically the explanation on passing variables to the partials. The one non-obvious section of the above code-snippet is the capturing of a variable called `markdown_include` followed by piping it as `markdownify`. This allows us to render a markdown include as styled `html` and inject it into the `<div>` as the main content.
-
-For each of the sections which you are including, be sure to create the corresponding `.md` files, also inside the `_includes` directory.
 
 By now, you should have all the basic content for your portfolio and blog, **congratulations!**
 
@@ -263,13 +271,49 @@ Now on to the fun part, making your portfolio look nice! Your portfolio should n
 
 ![Portfolio without styling]({{ site.url }}/assets/img/portfolio_no_styling.png)
 
+If your site does not resemble the image above or is missing components, be sure to check for build errors as it's likely a typo was made or a file created in an unexpected spot. Your directory and file structure should be this:
+
+```text
+├── _config.yml
+├── _includes
+|   ├── portfolio
+|   |   ├── education.md
+|   |   ├── experience.md
+|   |   ├── objective.md
+|   |   ├── projects.md
+|   |   └── skills.md
+|   ├── card.html
+|   ├── head.html
+|   └── home.html
+├── _layouts
+|   └── home.html
+├── _posts
+|   └── 2007-10-29-any-post-you-have-made.md
+├── _sass
+|   ├── page-layout.scss
+|   ├── typography.scss
+|   └── variables.scss
+├── _site
+├── .sass-cache
+├── assets
+|   └── css
+|       └── site.scss
+├── _config.yml
+├── 404.html
+├── about.md
+├── blog.html
+├── Gemfile
+├── Gemfile.lock
+└── index.html # can also be an 'index.md' with valid YAML Frontmatter
+```
+
 ### Setting yourself up to style
 
-Remember when I said: "_For each of the sections on the portfolio, we are rendering some content into a `card.html` template that we will later leverage for styling._"? Well now's that time! Let's get some `scss` up in here.
+Remember when I said: "_For each of the sections on the portfolio, we are rendering some content into a_ `card.html` _template that we will later leverage for styling._"? Well now's that time! Let's get some `scss` up in here.
 
-In the `assets/` folder, create a `css/` folder and a `site.scss` file. Jekyll is smart enough to automatically convert `sass` and `scss` to `css` and follow the same directory structure (which is easily overridable if you need).
+Create an `assets/` folder on the root directory and inside it, create a `css/` folder and a `site.scss` file. Jekyll is smart enough to automatically convert `sass` and `scss` to `css` and follow the same directory structure (which is easily overridable if you need).
 
-Since we're going to be adding stylesheets we are going to need the `head.html` include with the addition of our newly added `site.scss` sheet.
+Since we're going to be adding stylesheets we are going to need the `head.html` include with the addition of our newly added `site.scss` sheet. Go ahead and copy this code into your includes.
 
 ```html
 {% raw %}<head>
@@ -287,10 +331,10 @@ Since we're going to be adding stylesheets we are going to need the `head.html` 
         " | relative_url }}"> {% if jekyll.environment == 'production' and site.google_analytics %} {% include google-analytics.html %} {% endif %}
 </head>{% endraw %}
 ```
+{: data-title="/_includes/head.html" .code-title }
 
 In `site.scss` we will be importing all the partial stylesheets we create, start by stubbing out a `page-layout` partial.
 
-`site.scss`:
 ```scss
 ---
 sitemap: false
@@ -299,6 +343,7 @@ sitemap: false
 // Partials
 @import "page-layout";
 ```
+{: data-title="/assets/site.scss" .code-title }
 
 As the [Jekyll docs point out](https://jekyllrb.com/docs/assets/#sassscss), if you are using Sass `@import` statements, you’ll need to ensure that your `sass_dir` is set to the base directory that contains your Sass files. You can do that thusly in your `_config.yml`:
 
@@ -306,17 +351,18 @@ As the [Jekyll docs point out](https://jekyllrb.com/docs/assets/#sassscss), if y
 sass:
     sass_dir: _sass
 ```
+{: data-title="/_config.yml" .code-title }
 
-The docs advise you create all `scss` partial files inside a `_scss` directory, so let's do that for the `page-layout` file we've stubbed out and imported. For now we'll just put a basic border with some padding around each portfolio section to make sure everything's working.
 
-`_scss/page-layout.scss`:
+The docs advise you create all `scss` partial files inside a `_sass` directory, so let's do that for the `page-layout` file we've stubbed out and imported. For now we'll just put a basic border with some padding around each portfolio section to make sure everything's working.
 
 ```scss
-section.portfolio {
+section.card {
     border: 1px solid black;
     padding: 20px;
 }
 ```
+{: data-title="/_scss/page-layout.scss" .code-title }
 
 Once you've verified everything is working, let's [get jiggy wit it](https://www.youtube.com/watch?v=3JcmQONgXJM)!
 
@@ -324,7 +370,6 @@ Once you've verified everything is working, let's [get jiggy wit it](https://www
 
 One of Sass' greatest benefits is it's use of variables, a way to store information that you want to reuse throughout your stylesheet. You can store things like colors, font stacks, or any CSS value you think you'll want to reuse. Sass uses the `$` symbol to make something a variable. It's great practice to have a (or several) variable sheet(s) declared.
 
-`/_sass/variables.scss`:
 ```scss
 // Colours
 $base-color: rgba(#222, 0.8);
@@ -332,6 +377,9 @@ $secondary-color: rgba(#222, 0.7);
 $body-color: rgb(238, 238, 238);
 $section-color: rgb(244, 245, 246);
 ```
+{: data-title="/_sass/variables.scss" .code-title }
+
+Remember to import the new stylesheet in `assets/css/site.scss`.
 
 Let's clean up our portfolio page, giving the body a light background and the sections their own card-like containers with a bit of a shadow:
 
@@ -340,7 +388,7 @@ body {
     background-color: $body-color;
 }
 
-section.portfolio {
+section.card {
     background-color: $section-color;
     margin: 40px 0;
     padding: 40px;
@@ -352,15 +400,17 @@ section.portfolio {
     }
 }
 ```
+{: data-title="/_sass/page-layout.scss" .code-title }
 
 Rather than just use the default Helvetica font, let's stylize our family a bit to make it pop.
 
-I've chosen to import the Ubuntu font from Google Fonts, and specified the variable in my `variables.scss`:
+I've chosen to import the Ubuntu font from Google Fonts, and added the variable:
 
 ```scss
 @import url('https://fonts.googleapis.com/css?family=Ubuntu');
 $base-font : 'Ubuntu', serif;
 ```
+{: data-title="/_sass/variables.scss" .code-title }
 
 Create a new `typography.scss` sheet (be sure to import it in `site.scss`), and add to the body:
 
@@ -369,15 +419,15 @@ body {
     font-family: $base-font;
 }
 ```
+{: data-title="/_sass/typography.scss" .code-title }
 
-One thing you may want to do is bring in images. Jekyll makes referencing static assets quite easy. Save whatever desired decals for your cards you which to have in the `assets/img` folder. To reference them, you can simply do it by path (ie: {{ site.url }}/assets/img/my_sweet_img.jpg).
+One thing you may want to do is bring in images. Jekyll makes referencing static assets quite easy. Save whatever desired decals for your cards you which to have in the `assets/img` folder. To reference them, you can simply do it by path (ie: `{% raw %}{{ site.url }}{% endraw %}/assets/img/my_sweet_img.jpg`).
 
 I'm opting to add an additional variable to my card include called `decal-img`, passing in the file name to the partial. This addition will require image files put into `assets/img`, the new variable set when the partial is invoked in `home.html`, an update to `card.html` to show it and updated styling. The latter three changes should look something like this:
 
-`home.html`:
 ```html
 {% raw %}
---- 
+---
 layout: default
 ---
 
@@ -389,8 +439,8 @@ layout: default
   {% include card.html title="Skills" decal-img="skills.svg" content="skills.md" %}
 </div>{% endraw %}
 ```
+{: data-title="/_layouts/home.html" .code-title }
 
-`card.html`:
 ```html
 {% raw %}<section class="card">
     <header class="card-title">
@@ -410,14 +460,14 @@ layout: default
     </div>
 </section>{% endraw %}
 ```
+{: data-title="/_includes/card.html" .code-title }
 
-`page-layout.scss`:
 ```scss
 body {
     background-color: $body-color;
 }
 
-section.portfolio {
+section.card {
     background-color: $section-color;
     margin: 40px 0;
     padding: 40px;
@@ -436,6 +486,7 @@ section.portfolio {
     }
 }
 ```
+{: data-title="/_sass/page-layout.scss" .code-title }
 
 The last piece of styling I'll guide you through is cleaning up the individual portfolio card's, the rest is up to you!
 
@@ -447,10 +498,11 @@ header.card-title {
     font-size: 1.3em;
 }
 ```
+{: data-title="/_sass/page-layout.scss" .code-title }
 
 The remaining headers in each of the cards should be a bit closer together, and it would be nice to have dates on the applicable fields.
 
-Add the following class styling inside our `section.portfolio` styling:
+Add the following class styling inside our `section.card` styling:
 
 ```scss
 .card-content {
@@ -473,3 +525,8 @@ Add the following class styling inside our `section.portfolio` styling:
         }
     }
 ```
+{: data-title="/_sass/page-layout.scss" .code-title }
+
+# Congrats!
+
+I hope you enjoyed a quick exposure to Jekyll and learning just how easy spinning up a portfolio can be. Arguably the most important part is left for you - deployment! Luckily with GitHub pages, it is **dead simple** and can be done in about 5 minutes. Follow [GitHub's directions](https://pages.github.com/) and happy trails :).
