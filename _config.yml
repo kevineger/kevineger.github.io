@@ -39,6 +39,9 @@ sass:
     sass_dir: _sass
     style: compressed
 
+# Google Analytics
+google_analytics: UA-106564682-1
+
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
